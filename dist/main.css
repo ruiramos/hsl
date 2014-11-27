@@ -32,5 +32,10 @@ body {
   text-align: center;
   font-size: 2em;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
-  opacity: 0.5;
+  opacity: 0.2;
+  will-change: opacity;
+  transition: opacity 200ms ease-out;
+}
+.color.locked {
+  opacity: 1;
 }

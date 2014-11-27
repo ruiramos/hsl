@@ -1,6 +1,7 @@
 var Bacon = require('baconjs');
 
-var body = $('body');
+var body = $('body'),
+    locked = false;
 
 function xyFromEvent(v){ return [v.clientX, v.clientY]; }
 function toHueSaturation(v){
@@ -25,12 +26,27 @@ $(function(){
         val > 100 ? 100 : val;
     });
 
+  var click = body
+    .asEventStream('click')
+    .onValue(function(e){
+      console.log($(e.target).hasClass('locked'))
+      if($(e.target).hasClass('locked')) return;
+
+      locked = !locked;
+      if(locked){
+        $('.color').addClass('locked');
+      } else {
+        $('.color').removeClass('locked');
+      }
+    });
+
   var color = Bacon.combineWith(function(pos, scroll){ return pos.concat(scroll); }, mousePos, vScroll)
-         .onValue(function(v){
-            console.log(v);
-            $('.container').css('background', 'hsl('+v[0]+', '+v[1]+'%, '+v[2]+'%)');
-            $('.color').html(v.join(' ') + '<br>' + $('.container').css('background-color'));
-          });
+    .onValue(function(v){
+      if(locked) return;
+      $('.container').css('background', 'hsl('+v[0]+', '+v[1]+'%, '+v[2]+'%)');
+      $('.color').html(v.join(' ') + '<br>' + $('.container').css('background-color'));
+  });
+
 
 });
 
