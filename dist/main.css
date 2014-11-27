@@ -1,6 +1,3 @@
-* {
-  box-sizing: border-box;
-}
 html,
 body {
   width: 100%;
@@ -17,11 +14,11 @@ body {
   background: black;
 }
 .spacer {
-  height: 600%;
+  height: 200%;
 }
 .color {
   width: 300px;
-  height: 100px;
+  height: 80px;
   padding: 10px;
   position: absolute;
   left: 50vw;

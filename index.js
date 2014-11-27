@@ -21,7 +21,7 @@ $(function(){
     .asEventStream('scroll')
     .startWith(0)
     .map(function(){
-      var val = $('.container').scrollTop() / 10;
+      var val = Math.round($('.container').scrollTop() / $('.container').height() * 100);
       return val < 0 ? 0 :
         val > 100 ? 100 : val;
     });
@@ -29,10 +29,10 @@ $(function(){
   var click = body
     .asEventStream('click')
     .onValue(function(e){
-      console.log($(e.target).hasClass('locked'))
       if($(e.target).hasClass('locked')) return;
 
       locked = !locked;
+
       if(locked){
         $('.color').addClass('locked');
       } else {
