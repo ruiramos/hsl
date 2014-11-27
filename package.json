@@ -1,0 +1,27 @@
+{
+  "name": "hsl",
+  "version": "0.0.0",
+  "description": "HUE SATURATION LIGHTNESS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-js": "browserify index.js -o dist/bundle.js",
+    "watch-js": "watchify index.js -o dist/bundle.js --debug --verbose",
+    "build-less": "lessc index.less dist/main.css",
+    "watch-less": "nodemon --watch *.less --ext less --exec 'npm run build-less'",
+    "watch": "npm run watch-js & npm run watch-less",
+    "build": "npm run build-js & npm run build-less"
+  },
+  "author": "Rui Ramos <ruiramos@gmail.com>",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "baconjs": "~0.7.37",
+    "browserify": "~6.3.3",
+    "jquery": "~2.1.1",
+    "bacon.jquery": "~0.4.11"
+  },
+  "devDependencies": {
+    "watchify": "~2.1.1",
+    "nodemon": "~1.2.1"
+  }
+}
