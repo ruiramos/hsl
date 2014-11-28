@@ -1,50 +1,41 @@
 var Bacon = require('baconjs');
 
 var body = $('body'),
-    locked = false;
+    container = $('.container');
 
-function xyFromEvent(v){ return [v.clientX, v.clientY]; }
-function toHueSaturation(v){
-  v[0] = (v[0] * (360 / body.width())).toFixed(2);
-  v[1] = (v[1] * (100 / body.height())).toFixed(2);
-  return v;
-}
+function xyFromEvent(e){ return [e.clientX, e.clientY]; }
+function toHueSaturation(v){ return [v[0] * (360 / body.width()).toFixed(2), (v[1] * (100 / body.height())).toFixed(2)]; }
+
+function getScrollPosition(){ return Math.round(container.scrollTop() / container.height() * 100); }
+function lightnessFromScrollPosition(v){ return val < 0 ? 0 : val > 100 ? 100 : val; }
 
 $(function(){
-  // Simple click example
-  var mousePos = body
+  var mousePositionStream = body
     .asEventStream('mousemove')
     .map(xyFromEvent)
     .map(toHueSaturation);
 
-  var vScroll = $('.container')
+  var vScrollStream = $('.container')
     .asEventStream('scroll')
     .startWith(0)
-    .map(function(){
-      var val = Math.round($('.container').scrollTop() / $('.container').height() * 100);
-      return val < 0 ? 0 :
-        val > 100 ? 100 : val;
-    });
+    .map(getScrollPosition)
+    .map(lightnessFromScrollPosition);
 
-  var click = body
+  var clickStream = body
     .asEventStream('click')
-    .onValue(function(e){
-      if($(e.target).hasClass('locked')) return;
+    .filter(function(e){ return !$(e.target).hasClass('locked');  }) // filter out clicks on the .locked element
+    .scan(1, function(a){ return !a; });
 
-      locked = !locked;
-
-      if(locked){
-        $('.color').addClass('locked');
-      } else {
-        $('.color').removeClass('locked');
-      }
-    });
-
-  var color = Bacon.combineWith(function(pos, scroll){ return pos.concat(scroll); }, mousePos, vScroll)
+  Bacon.combineWith(
+    function(pos, scroll, unlocked){ return unlocked && pos.concat(scroll); }, mousePositionStream, vScrollStream, clickStream)
     .onValue(function(v){
-      if(locked) return;
-      $('.container').css('background', 'hsl('+v[0]+', '+v[1]+'%, '+v[2]+'%)');
-      $('.color').html(v.join(' ') + '<br>' + $('.container').css('background-color'));
+      if(v){
+        $('.container').css('background', 'hsl('+v[0]+', '+v[1]+'%, '+v[2]+'%)');
+        $('.color').html(v.join(' ') + '<br>' + container.css('background-color'));
+        $('.color').removeClass('locked');
+      } else {
+        $('.color').addClass('locked');
+      }
   });
 
 
