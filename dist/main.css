@@ -12,6 +12,7 @@ body {
   overflow: auto;
   padding-right: 20px;
   background: black;
+  transition: background 250ms ease-out;
 }
 .spacer {
   height: 200%;

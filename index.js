@@ -10,6 +10,8 @@ function getScrollPosition(){ return Math.round(container.scrollTop() / containe
 function lightnessFromScrollPosition(v){ return v < 0 ? 0 : v > 100 ? 100 : v; }
 
 $(function(){
+  container.scrollTop(container.height() / 2);
+
   var mousePositionStream = body
     .asEventStream('mousemove')
     .map(xyFromEvent)
@@ -33,11 +35,17 @@ $(function(){
         $('.container').css('background', 'hsl('+v[0]+', '+v[1]+'%, '+v[2]+'%)');
         $('.color').html(v.join(' ') + '<br>' + container.css('background-color'));
         $('.color').removeClass('locked');
+        if($('.container').css('transition') !== 'none') {
+          setTimeout(function(){
+            $('.container').css('transition', 'none');
+            $('.color').html(v.join(' ') + '<br>' + container.css('background-color'));
+          }, 250);
+        }
       } else {
         $('.color').addClass('locked');
+        $('.container').css('transition', 'background 250ms ease-out');
       }
   });
-
 
 });
 
