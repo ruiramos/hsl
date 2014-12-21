@@ -4,7 +4,7 @@ var body = $('body'),
     container = $('.container');
 
 function xyFromEvent(e){ return [e.clientX, e.clientY]; }
-function toHueSaturation(v){ return [v[0] * (360 / body.width()).toFixed(2), (v[1] * (100 / body.height())).toFixed(2)]; }
+function toHueSaturation(v){ return [Math.round(v[0] * (360 / body.width()) * 10) / 10, Math.round(v[1] * (100 / body.height()) * 10) / 10]; }
 
 function getScrollPosition(){ return Math.round(container.scrollTop() / container.height() * 100); }
 function lightnessFromScrollPosition(v){ return v < 0 ? 0 : v > 100 ? 100 : v; }
