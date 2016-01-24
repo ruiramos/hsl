@@ -3,6 +3,8 @@ hsl
 
 hsl color explorer
 
+http://hsl.ruiramos.com
+
 - left/right: hue
 - up/down: saturation
 - scroll: lightness
