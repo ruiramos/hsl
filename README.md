@@ -3,7 +3,7 @@ hsl
 
 hsl color explorer
 
-http://hsl.ruiramos.com
+http://ruiramos.github.io/hsl/
 
 - left/right: hue
 - up/down: saturation
